@@ -1,0 +1,1352 @@
+#include <iostream>
+#include <string.h>
+#include <fstream>
+#include <string>
+#include<iomanip>
+#include<windows.h>
+#include <stdio.h>
+#include <chrono>
+//creo que primero hay que poner que eligar que de que empresa es antes de iniciar sesion
+using namespace std;
+
+int eleccion = 0, i = 0, numeroempresa = 0;
+
+void Pantalla_principal();
+void registracionadmin(string regadminparam, string regpassparam);
+void inicio_sesionadmin();
+void admin();
+void admindentro();
+void listaadmin();
+void admincajero();
+void inicio_sesioncajero();
+void registracioncajero(string regcajeroparam, string regpassparam, string fotoparam);
+void cajero();
+void bajacajero();
+void actualizarcajero();
+void listacajero();
+void cajerodentro();
+void clientecajero();
+void listaclientecajero();
+void cliente();
+void altacliente(string nomclienteparam, string emailparam, int telefonoparam = 0);
+void actualizarcliente();
+void bajacliente();
+void listacliente();
+void promociones();
+void altapromo();
+void bajapromo();
+void listapromo();
+void consumos();
+void altaconsumo();
+void listaconsumo();
+void printBuildDateTime();
+int Contrainvalida(string Registracion);
+bool NombreInvalido(string Registracion);
+void restablecercontra();
+void registroadminbinario(string regadminparam, string regpassparam);
+void leeradminbinario(string regadmin, string regpass);
+void registrocajerobinario(string regcajero, string regcontra, string foto);
+void leercajerobinario(string regcajero, string regcontra, string foto);
+void registroclientesbinario(string nomcliente, string email, int telefono);
+void leerclientesbinario(string nomcliente, string email, int telefono);
+void registropromosbinario(string nombrepromo, int montopromo, float porcentajepromo, int estatus);
+void leerpromosbinario(string nombrepromo, int montopromo, float porcentajepromo, int estatus);
+void registroconsumosbinario(string nomcliente, int monto, int monto2, float subtotal, float descuento, float total, int numcliente);
+void leerconsumosbinario(string nomcliente, int monto, int monto2, float subtotal, float descuento, float total, int numcliente);
+
+int main() {
+
+	system("color 0B");
+	Pantalla_principal();
+	return 0;
+}
+
+//funcion para la decision de empresas al iniciar sesion
+void Pantalla_principal()
+{
+	bool usuario = true;
+	int num = 0;
+	cout << "___________________________________" << endl;
+	cout << "seleccione la empresa a la que trabaja\n1.Comercio 1 \n2.Comercio 2 \n3.Comercio 3" << endl;
+	cin >> numeroempresa;
+	switch (numeroempresa) {
+	case 1:
+		system("cls");
+		admincajero();
+		break;
+	case 2:
+		system("cls");
+		admincajero();
+		break;
+	case 3:
+		system("cls");
+		admincajero();
+		break;
+	default:
+		cout << "Opcion incorrecta\n";
+		return Pantalla_principal();
+	}
+}
+//funcion para inicio de sesion que iria despues de la eleccion de la empresa
+void admincajero() {
+	int op = 0;
+	cout << "___________________________________" << endl;
+	cout << "Seleccione una opcion" << endl;
+	cout << "1.Admin" << endl;
+	cout << "2.cajero" << endl;
+	cout << "3.Regresar" << endl;
+	cin >> op;
+	switch (op) {
+	case 1:
+		system("cls");
+		admin();
+		break;
+	case 2:
+		system("cls");
+		inicio_sesioncajero();
+		break;
+	case 3:
+		system("cls");
+		return Pantalla_principal();
+		break;
+
+	default:
+		cout << "opcion incorrecta\n";
+		return admincajero();
+	}
+}
+void admin() {
+	string regadmin, regpass, ru, rp;
+	cout << "___________________________________" << endl;
+	cout << "Seleccione una opcion" << endl;
+	cout << "___________________________________" << endl;
+	cout << "1.Registrarse" << endl;
+	cout << "2.Iniciar sesion" << endl;
+	cout << "3.Lista de admins" << endl;
+	cout << "4.Lista de admins binario" << endl;
+	cout << "5.Reestablecer contrasenia" << endl;
+	cout << "6.Regresar" << endl;
+	cout << "0.Salir" << endl;
+	cout << "___________________________________" << endl;
+	cin >> eleccion;
+	switch (eleccion) {
+	case 0: {
+		exit(0);
+		break;
+	}
+	case 1: {
+		system("cls");
+		registracionadmin(regadmin, regpass);
+		return admin();
+	}
+	case 2: {
+		system("cls");
+		inicio_sesionadmin();
+		return admin();
+	}
+	case 3: {
+		system("cls");
+		listaadmin();
+		return admin();
+	}
+	case 4: {
+		leeradminbinario(regadmin, regpass);
+		return admin();
+	}
+	case 5: {
+		restablecercontra();
+		return admin();
+	}
+	case 6: {
+		system("cls");
+		return admincajero();
+		break;
+	}
+	default:
+		cout << "nose ingreso una opcion correcta\n";
+		return admin();
+		break;
+	}
+}
+void admindentro() {
+	int op = 0;
+	cout << "Que es lo que desea revisar?\n 1.Cajeros\n 2.Clientes\n 3.promociones\n 4.consumos\n 5.regresar" << endl;
+	cin >> op;
+	switch (op) {
+	case 1: {
+		system("cls");
+		cajero();
+		return admindentro();
+	}
+	case 2: {
+		system("cls");
+		cliente();
+		return admindentro();
+	}
+	case 3: {
+		system("cls");
+		promociones();
+	}
+	case 4: {
+		system("cls");
+		consumos();
+	}
+	case 5:
+		system("cls");
+		return admin();
+	default:
+		cout << "no se ingreso una opcion correcta\n";
+		return admindentro();
+	}
+}
+void actualizaradmin() {
+	fstream fin;
+	ofstream temp;
+	string u, c, linea, contra, ref, nombre;
+	int op = 0, lineacambiar, n, pase = 0;
+	fin.open("admin.txt", ios::in);
+	temp.open("temp.txt");
+	cout << "Ingrese el numero del admin al que quiera cambiar la contrasenia" << endl;
+	cin >> lineacambiar;
+
+	while (getline(fin, ref, '\n')) {
+
+		if (i == lineacambiar)
+			break;
+		i++;
+	}
+	fin.close();
+
+	fin.open("admin.txt", ios::in);
+	while (getline(fin, linea)) {
+		if (linea != ref)
+			temp << linea << endl;
+	}
+	fstream refe;
+	refe.open("temp2", ios::out);
+	refe << ref;
+	refe.close();
+	cout << "Ingrese el nuevo nombre" << endl;
+	cin >> nombre;
+	cout << "Ingrese la nueva contrasenia" << endl;
+	cin >> contra;
+	Contrainvalida(contra);
+	refe.open("temp2", ios::in);
+	refe >> u >> c >> n;
+	u = nombre;
+	c = contra;
+	temp << u << ' ' << c << ' ' << n << endl;
+	fin.close();
+	temp.close();
+	refe.close();
+	remove("temp2.txt");
+	remove("admin.txt");
+	rename("temp.txt", "admin.txt");
+	admin();
+}
+void cajero() {
+	string regcajero, regpass, ru, rp, foto;
+	int op = 0;
+	cout << "Que es lo que desea hacer?\n 1.Registrar un cajero\n 2.Dar de baja un cajero\n 3.Actualizar un cajero\n 4.Revisar lista de cajeros\n 5.Revisar lista de cajeros binario\n6.regresar" << endl;
+	cin >> op;
+	switch (op) {
+	case 1: {
+		registracioncajero(regcajero, regpass, foto);
+		return cajero();
+	}
+	case 2: {
+		system("cls");
+		bajacajero();
+	}
+	case 3: {
+		actualizarcajero();
+		break;
+	}
+	case 4: {
+		system("cls");
+		listacajero();
+		return cajero();
+		break;
+	}
+	case 5: {
+		leercajerobinario(regcajero, regpass, foto);
+		return cajero();
+	}
+	case 6: {
+		system("cls");
+		return admindentro();
+	}
+	default:
+		cout << "No se ingreso una opcion correcta";
+		return cajero();
+	}
+}
+void registracionadmin(string regadmin, string regpass)
+{
+	int op = 0;
+	fstream reg;
+	system("cls");
+	cin.ignore();
+	cout << "Ingrese nombre de usuario:";
+	getline(cin, regadmin);
+	NombreInvalido(regadmin);
+	cout << "\nIngrese la contrasenia:";
+	getline(cin, regpass);
+	Contrainvalida(regpass);
+	cout << "numero de la empresa:   " << numeroempresa << endl;
+	cout << "Quiere guardar la informacion?\n 1.Guardar\n 2.Regresar" << endl;
+	cin >> op;
+	switch (op)
+	{
+	case 1: {
+		reg.open("admin.txt", ios::out | ios::app | ios::ate);
+		reg << regadmin << ' ' << regpass << ' ' << numeroempresa << endl;
+		reg.close();
+		system("cls");
+		registroadminbinario(regadmin, regpass);
+		cout << "\nRegistracion exitosa\n";
+		admin();
+	}
+	case 2: {
+		return admin();
+	}
+	default:
+		cout << "no se ingreso una opcion correcta" << endl;
+		return admin();
+	}
+}
+void inicio_sesionadmin()
+{
+	int pase = 0, n;
+	string usuario, contra, u, p;
+	cin.ignore();
+	system("cls");
+	cout << "Nombre de usuario :";
+	getline(cin, usuario);
+	cout << "Contrasenia :";
+	getline(cin, contra);
+
+	fstream input;
+	input.open("admin.txt", ios::in);
+	while (input >> u >> p >> n)
+	{
+		if (u == usuario && p == contra && n == numeroempresa)
+		{
+			pase = 1;
+			system("cls");
+		}
+	}
+	input.close();
+	if (pase == 1)
+	{
+		cout << "\nBienvenido    " << usuario << endl;
+	}
+	else
+	{
+		cout << "Nombre de usuario o contrasenia equivocadas\n";
+		admin();
+	}
+	admindentro();
+}
+void registracioncajero(string regcajero, string regcontra, string foto)
+{
+	fstream reg;
+	system("cls");
+	cin.ignore();
+	cout << "Ingrese nombre de usuario:";
+	getline(cin, regcajero);
+	cout << "\nIngrese la contrasenia:";
+	getline(cin, regcontra);
+	cout << "\nIngrese la foto:";
+	getline(cin, foto);
+	cout << numeroempresa << endl;
+	system("pause");
+
+	reg.open("cajero.txt", ios::out | ios::app | ios::ate);
+	reg << regcajero << ' ' << regcontra << ' ' << numeroempresa << ' ' << foto << endl;
+	reg.close();
+	system("cls");
+	registrocajerobinario(regcajero, regcontra, foto);
+	cout << "\nRegistracion exitosa\n";
+	cajero();
+}
+void inicio_sesioncajero()
+{
+	int pase = 0, n;
+	string usuario, contra, u, p;
+	cin.ignore();
+	system("cls");
+	cout << "Nombre de usuario:";
+	getline(cin, usuario);
+	cout << "Contrasenia:";
+	getline(cin, contra);
+
+	fstream input;
+	input.open("cajero.txt", ios::in);
+	while (input >> u >> p >> n)
+	{
+		if (u == usuario && p == contra && n == numeroempresa)
+		{
+			pase = 1;
+			system("cls");
+		}
+	}
+	input.close();
+	if (pase == 1)
+	{
+		cout << "\nBienvenido    " << usuario << endl;
+	}
+	else
+	{
+		cout << "Nombre de usuario o contrasenia equivocadas\n";
+		inicio_sesioncajero();
+	}
+	cajerodentro();
+}
+void bajacajero() {
+	int i = 0;
+	int lineaBorrar = 0;
+	string deleteline;
+	string line;
+	ifstream fin;
+	fin.open("cajero.txt");
+	ofstream temp;
+	temp.open("temp.txt");
+	cout << "Ingrese el numero del cajero que quiera dar de baja";
+	cin >> lineaBorrar;
+
+	while (getline(fin, deleteline, '\n')) {
+
+		if (i == lineaBorrar)
+			break;
+		i++;
+	}
+	fin.close();
+
+	fin.open("cajero.txt");
+	while (getline(fin, line)) {
+		if (line != deleteline)
+			temp << line << endl;
+	}
+	fin.close();
+	temp.close();
+	remove("cajero.txt");
+	rename("temp.txt", "cajero.txt");
+	return cajero();
+}
+void actualizarcajero() {
+	fstream fin;
+	ofstream temp;
+	string u, c, linea, contra, ref, nombre;
+	int op = 0, lineacambiar, n, pase = 0;
+	fin.open("cajero.txt", ios::in);
+	temp.open("temp.txt");
+	cout << "Ingrese el numero del admin al que quiera cambiar la contrasenia" << endl;
+	cin >> lineacambiar;
+
+	while (getline(fin, ref, '\n')) {
+
+		if (i == lineacambiar)
+			break;
+		i++;
+	}
+	fin.close();
+
+	fin.open("cajero.txt", ios::in);
+	while (getline(fin, linea)) {
+		if (linea != ref)
+			temp << linea << endl;
+	}
+	fstream refe;
+	refe.open("temp2", ios::out);
+	refe << ref;
+	refe.close();
+	cout << "Ingrese el nuevo nombre" << endl;
+	cin >> nombre;
+	cout << "Ingrese la nueva contrasenia" << endl;
+	cin >> contra;
+	Contrainvalida(contra);
+	refe.open("temp2", ios::in);
+	refe >> u >> c >> n;
+	u = nombre;
+	c = contra;
+	temp << u << ' ' << c << ' ' << n << endl;
+	fin.close();
+	temp.close();
+	refe.close();
+	remove("temp2.txt");
+	remove("cajero.txt");
+	rename("temp.txt", "cajero.txt");
+	admin();
+}
+void cajerodentro() {
+	cout << "___________________________________" << endl;
+	cout << "Seleccione una opcion" << endl;
+	cout << "___________________________________" << endl;
+	cout << "1.Lista de cajero" << endl;
+	cout << "3.clientes" << endl;
+	cout << "4.alta promociones" << endl;
+	cout << "5.lista de promociones" << endl;
+	cout << "6.consumos" << endl;
+	cout << "7.regresar" << endl;
+	cout << "0.Salir" << endl;
+	cout << "___________________________________" << endl;
+	cin >> eleccion;
+	switch (eleccion) {
+	case 0: {
+		exit(0);
+	}
+	case 1: {
+		listacajero();
+		return cajerodentro();
+	}
+	case 2: {
+		actualizarcajero();
+		return cajerodentro();
+	}
+	case 3: {
+		clientecajero();
+		return cajerodentro();
+	}
+	case 4: {
+		altapromo();
+		return cajerodentro();
+	}
+	case 5: {
+		listapromo();
+		return cajerodentro();
+	}
+	case 6: {
+		consumos();
+		return cajerodentro();
+	}
+	case 7: {
+		return admincajero();
+	}
+	default:
+		cout << "no se ingreso una opcion correcta\n";
+		return cajerodentro();
+
+	}
+}
+bool NombreInvalido(string Registracion) {
+	bool pase = false;
+	if (Registracion.length() > 2 && Registracion.length() < 15) {// Revision de longitud
+		pase = true;
+		if (isdigit(Registracion[i]) == true) {
+			return true;
+
+			if (true) {
+				cout << "Usuario invalido";
+				admin();
+			}
+		}
+	}
+	else {
+		cout << "Usuario invalido" << endl;
+		admin();
+	}
+
+}
+int Contrainvalida(string Registracion) {
+	if (Registracion.length() >= 3 && Registracion.length() <= 10) {
+		return true;
+	}
+	else {
+		cout << "Contrasenia invalida " << endl;
+		admin();
+	}
+
+	for (int i = 0; i < Registracion.length(); i++) {  //Revisa si hay digitos
+		if (isdigit(Registracion[i]) == true) {
+			return true;
+		}
+		if (Registracion[i] == true) {
+			break;
+		}
+		else {
+			cout << "Contrasenia invalida";
+			admin();
+		}
+	}
+	admin();
+}
+void listaadmin() {
+	int i = 0;
+	string linea;
+	fstream admin;
+	admin.open("admin.txt", ios::in | ios::app);
+	if (!admin.is_open()) {
+		cout << "No se pudo abrir el archivo" << endl;
+	}
+	while (getline(admin, linea, '\n')) {
+		cout << "El usuario que fue ingresada en la posicion     " << "[" << i << "]" << endl;
+		cout << "Nombre y contrasenia del admin:" << linea << endl;
+		i++;
+	}
+	admin.close();
+}
+void listacajero() {
+	int i = 0;
+	string linea;
+	fstream cajeroarchivo;
+	cajeroarchivo.open("cajero.txt", ios::in | ios::app);
+	if (!cajeroarchivo.is_open()) {
+		cout << "No se pudo abrir el archivo" << endl;
+		system("pause");
+	}
+	while (getline(cajeroarchivo, linea, '\n')) {
+
+		cout << "El usuario que fue ingresada en la posicion     " << "[" << i << "]" << endl;
+		cout << "Nombre y contrasenia del usuario:" << linea << endl;
+		i++;
+	}
+	cajeroarchivo.close();
+}
+void clientecajero()
+{
+	fstream archivocliente;
+	string nomcliente, alicliente, email;
+	int telefono = 0, op = 0;
+	cout << "seleccione lo que quiere realizar\n 1.Dar de alta cliente\n 2.Actualizar cliente\n 3.Lista de clientes\n 4.Regresar" << endl;
+	cin >> op;
+	switch (op)
+	{
+	case 1: {
+		altacliente(nomcliente, email, telefono);
+		return cliente();
+	}
+	case 2: {
+		actualizarcliente();
+	}
+	case 3: {
+		system("cls");
+		listaclientecajero();
+		return cliente();
+	}
+	case 4: {
+		system("cls");
+		return admindentro();
+	}
+	default:
+		cout << "no se ingreso una opcion correcta\n";
+		return cliente();
+	}
+}
+void cliente()
+{
+	fstream archivocliente;
+	string nomcliente, alicliente, email;
+	int telefono = 0, op = 0;
+	cout << "seleccione lo que quiere realizar\n 1.Dar de alta cliente\n 2.Actualizar cliente\n 3.Lista de clientes\n 4.Regresar" << endl;
+	cin >> op;
+	switch (op)
+	{
+	case 1: {
+		altacliente(nomcliente, email, telefono);
+		return cliente();
+	}
+	case 2: {
+		actualizarcliente();
+	}
+	case 3: {
+		system("cls");
+		listacliente();
+		return cliente();
+	}
+	case 4: {
+		leerclientesbinario(nomcliente, email, telefono);
+		return cliente();
+	}
+	case 5: {
+		system("cls");
+		return admindentro();
+	}
+	default:
+		cout << "no se ingreso una opcion correcta\n";
+		return cliente();
+	}
+}
+void altacliente(string nomcliente, string email, int telefono) {
+	fstream reg;
+	int op = 0;
+	system("cls");
+	cout << "Ingrese nombre de cliente:";
+	cin >> nomcliente;
+	cout << "\nIngrese el telefono:";
+	cin >> telefono;
+	cout << "\nIngrese el email:";
+	cin >> email;
+
+	cout << "Quiere guardar la informacion?\n 1.Guardar\n 2.Regresar" << endl;
+	cin >> op;
+	switch (op)
+	{
+	case 1: {
+		reg.open("clientes.txt", ios::out | ios::app | ios::ate);
+		reg << nomcliente << " ";
+		reg << telefono << " ";
+		reg << email << " ";
+		reg << numeroempresa;
+		reg << __TIMESTAMP__ << endl;
+		reg.close();
+		registroclientesbinario(nomcliente, email, telefono);
+		system("cls");
+		cout << "\nRegistracion exitosa\n";
+		cliente();
+	}
+	case 2: {
+		return cliente();
+	}
+	default:
+		cout << "no se ingreso una opcion correcta";
+		return altacliente(nomcliente, email, telefono);
+		break;
+	}
+}
+void actualizarcliente() {
+	fstream fin;
+	ofstream temp;
+	string u, t, e, linea, email, ref, telefono, f;
+	int op = 0, lineacambiar, n, pase = 0;
+	fin.open("clientes.txt", ios::in);
+	temp.open("temp.txt");
+	cout << "Ingrese el numero del admin al que quiera cambiar la contrasenia" << endl;
+	cin >> lineacambiar;
+
+	while (getline(fin, ref, '\n')) {
+
+		if (i == lineacambiar)
+			break;
+		i++;
+	}
+	fin.close();
+
+	fin.open("clientes.txt", ios::in);
+	while (getline(fin, linea)) {
+		if (linea != ref)
+			temp << linea << endl;
+	}
+	fstream refe;
+	refe.open("temp2", ios::out);
+	refe << ref;
+	refe.close();
+	cout << "Ingrese el nuevo telefono" << endl;
+	cin >> telefono;
+	cout << "Ingrese el nuevo email" << endl;
+	cin >> email;
+	refe.open("temp2", ios::in);
+	refe >> u >> t >> e >> n >> f;
+	t = telefono;
+	e = email;
+	temp << u << ' ' << t << ' ' << e << ' ' << n << ' ' << f << endl;
+	fin.close();
+	temp.close();
+	refe.close();
+	remove("temp2.txt");
+	remove("clientes.txt");
+	rename("temp.txt", "clientes.txt");
+	cliente();
+
+}
+void listaclientecajero() {
+	int op = 0, i = 0;
+	string linea;
+	fstream archivocliente;
+	archivocliente.open("clientes.txt", ios::in | ios::app);
+	if (!archivocliente.is_open()) {
+		cout << "No se pudo abrir el archivo" << endl;
+	}
+	while (getline(archivocliente, linea, '\n')) {
+
+		cout << "El cliente que fue ingresada en la posicion     " << "[" << i << "]" << endl;
+		cout << linea << endl;
+		i++;
+	}
+}
+void listacliente() {
+	int op = 0, i = 0;
+	string linea;
+	fstream archivocliente;
+	archivocliente.open("clientes.txt", ios::in | ios::app);
+	if (!archivocliente.is_open()) {
+		cout << "No se pudo abrir el archivo" << endl;
+	}
+	while (getline(archivocliente, linea, '\n')) {
+
+		cout << "El cliente que fue ingresada en la posicion     " << "[" << i << "]" << endl;
+		cout << linea << endl;
+		i++;
+	}
+	archivocliente.close();
+	cout << "Ingrese una opcion\n1.Baja\n2.actualizar\n3.nada" << endl;
+	cin >> op;
+	switch (op)
+	{
+	case 1: {
+		bajacliente();
+	}
+	case 2: {
+		actualizarcliente();
+	}
+	case 3:
+		return cliente();
+	default:
+		cout << "No se ingreso una opcion correcta";
+		return listacliente();
+	}
+	return cliente();
+}
+void bajacliente() {
+	int i = 0;
+	int lineaBorrar = 0;
+	string deleteline;
+	string line;
+	ifstream fin;
+	fin.open("clientes.txt");
+	ofstream temp;
+	temp.open("temp.txt");
+	cout << "Ingrese el numero del cajero que quiera dar de baja" << endl;
+	cin >> lineaBorrar;
+
+	while (getline(fin, deleteline, '\n')) {
+
+		if (i == lineaBorrar)
+			break;
+		i++;
+	}
+	fin.close();
+
+	fin.open("clientes.txt");
+	while (getline(fin, line)) {
+		if (line != deleteline)
+			temp << line << endl;
+	}
+	fin.close();
+	temp.close();
+	remove("clientes.txt");
+	rename("temp.txt", "clientes.txt");
+	return cliente();
+}
+void promociones() {
+	string nombrepromo;
+	float porcentajepromo = 0;
+	int op = 0, montopromo = 0, estatus = 0;
+	cout << "ingrese una opcion\n 1.Alta promocion\n 2.Baja promocion\n 3.Lista promociones\n4.Lista promociones binario\n 5.regresar" << endl;
+	cin >> op;
+	switch (op)
+	{
+	case 1: {
+		system("cls");
+		altapromo();
+	}
+	case 2: {
+		bajapromo();
+	}
+	case 3: {
+		system("cls");
+		listapromo();
+	}
+	case 4: {
+		leerpromosbinario(nombrepromo, montopromo, porcentajepromo, estatus);
+		return promociones();
+	}
+	case 5: {
+		system("cls");
+		admindentro();
+	}
+	default:
+		break;
+	}
+}
+void altapromo() {
+	fstream reg, fin;
+	int estatus = 1;
+	fstream promo;
+	string nombrepromo;
+	int montopromo, op;
+	float porcentajepromo;
+
+	cout << "Nombre de la promocion" << endl;
+	cin >> nombrepromo;
+	cout << "Monto de promociones" << endl;
+	cin >> montopromo;
+	cout << "porcentaje de la promocion" << endl;
+	cin >> porcentajepromo;
+	if (porcentajepromo > 0 && porcentajepromo < 100) {
+		cout << "porcentaje guardado" << endl;
+	}
+	cout << "estatus de promocion" << endl;
+	if (estatus == 1) {
+		cout << "[Activa] ----- Inactiva" << endl;
+		system("pause");
+	}
+	else {
+		cout << "Activa ----- [Inactiva]" << endl;
+		system("pause");
+	}
+	cout << "quiere desactivar la promo\n 1.si\n 2.no" << endl;
+	cin >> op;
+	switch (op)
+	{
+	case 1: {
+		estatus = 1;
+		cout << "Activa ----- [Inactiva]" << endl;
+		break;
+	}
+	case 2: {
+		estatus = 0;
+		cout << "[Activa] ----- Inactiva" << endl;
+		break;
+	}
+	default:
+		cout << "No se ingreso una opcion correcta" << endl;
+		break;
+	}
+	reg.open("promos.txt", ios::out | ios::app | ios::ate);
+	reg << nombrepromo << '|' << montopromo << '|' << porcentajepromo << '|' << estatus << endl;
+	reg.close();
+	fin.open("promosporcenaje.txt", ios::out | ios::app | ios::ate);
+	fin << porcentajepromo << endl;
+	fin.close();
+	system("cls");
+	registropromosbinario(nombrepromo, montopromo, porcentajepromo, estatus);
+	cout << "\nAlta exitosa\n";
+
+	return promociones();
+}
+void bajapromo() {
+	int i = 0;
+	int lineaBorrar = 0;
+	string deleteline;
+	string line;
+	ifstream fin;
+	fin.open("promos.txt");
+	ofstream temp;
+	temp.open("temp.txt");
+	cout << "Ingrese el numero del cajero que quiera dar de baja";
+	cin >> lineaBorrar;
+
+	while (getline(fin, deleteline, '\n')) {
+
+		if (i == lineaBorrar)
+			break;
+		i++;
+	}
+	fin.close();
+
+	fin.open("promos.txt");
+	while (getline(fin, line)) {
+		if (line != deleteline)
+			temp << line << endl;
+	}
+	fin.close();
+	temp.close();
+	remove("promos.txt");
+	rename("temp.txt", "promos.txt");
+	return promociones();
+}
+void listapromo() {
+	int i = 0;
+	string linea;
+	fstream reg;
+	reg.open("promos.txt", ios::in | ios::app);
+	if (!reg.is_open()) {
+		cout << "No se pudo abrir el archivo" << endl;
+	}
+	cout << "estatus = 1 activo | estatus = 0 inactivo" << endl;
+	while (getline(reg, linea, '\n')) {
+
+		cout << "El cliente que fue ingresada en la posicion     " << "[" << i << "]" << endl;
+		cout << linea << endl;
+		i++;
+	}
+	reg.close();
+	return promociones();
+}
+void consumos() {
+	string nomcliente;
+	int numcliente = 0;
+	float monto = 0, monto2 = 0, subtotal = 0, total = 0, descuento = 0;
+	int op = 0;
+	cout << "Que es lo que desea hacer?\n1.Alta consumo\n2.Lista consumo\n3.Lista consumos binario\n4.Regresar" << endl;
+	cin >> op;
+	switch (op)
+	{
+	case 1: {
+		altaconsumo();
+		return consumos();
+	}
+	case 2: {
+		listaconsumo();
+		return consumos();
+	}
+	case 3: {
+		leerconsumosbinario(nomcliente, monto, monto2, subtotal, descuento, total, numcliente);
+		return consumos();
+	}
+	case 4: {
+		return admincajero();
+	}
+	default:
+		cout << "no se ingreso una opcion correcta" << endl;
+		system("pause");
+		return consumos();
+		break;
+	}
+}
+void altaconsumo() {
+	string linea, nomcliente;
+	int numcliente, op = 0;
+	float monto, monto2 = 0, subtotal = 0, total, descuento = 0, i = 0;
+	fstream reg, fin;
+	listaclientecajero();
+	cout << "Ingrese el numero del cliente que esta comprando" << endl;
+	cin >> numcliente;
+	cout << "Monto" << endl;
+	cin >> monto;
+	if (monto > 0) {
+		cout << "---monto capturado---" << endl;
+	}
+	else {
+		cout << "el monto no puede ser menor a 0" << endl;
+		return altaconsumo();
+	}
+	cout << "Quiere agregar otro monto?\n1.si\n0.no" << endl;
+	cin >> op;
+	if (op == 1)
+	{
+		cout << "Monto" << endl;
+		cin >> monto2;
+		if (monto2 > 0) {
+			cout << "---monto capturado---" << endl;
+		}
+		else {
+			cout << "el monto no puede ser menor a 0" << endl;
+			return altaconsumo();
+		}
+	}
+	else if (op == 0) {
+		monto2 = 0;
+	}
+	cout << "fecha";
+	printBuildDateTime();
+	cout << "" << endl;
+	subtotal = monto + monto2;
+	cout << "subtotal\n" << subtotal << endl;
+	fin.open("promosporcenaje.txt", ios::in | ios::app);
+	fin >> linea;
+	i = stof(linea);
+	descuento = i;
+	descuento = (subtotal * descuento / 100);
+	total = subtotal - descuento;
+	cout << "total" << total << endl;
+	cout << "Quiere guardar la informacion?\n 1.Guardar\n 2.Regresar" << endl;
+	cin >> op;
+	switch (op)
+	{
+	case 1: {
+		int i = 0;
+		string linea;
+		fstream fin;
+		fin.open("clientes.txt", ios::in | ios::app);
+		if (!fin.is_open()) {
+			cout << "No se pudo abrir el archivo" << endl;
+		}
+		reg.open("consumo.txt", ios::out | ios::app | ios::ate);
+		while (getline(fin, nomcliente, '\n')) {
+			if (i == numcliente)
+				break;
+			i++;
+		}
+		fin >> nomcliente;
+		reg << "[" << nomcliente << "]    ";
+		reg << monto << "+";
+		reg << monto2 << " ";
+		reg << __TIMESTAMP__ << " ";
+		reg << subtotal;
+		reg << descuento;
+		reg << total;
+		reg << numcliente << endl;
+
+		reg.close();
+		system("cls");
+		registroconsumosbinario(nomcliente, monto, monto2, subtotal, descuento, total, numcliente);
+		cout << "\nRegistracion exitosa\n";
+		consumos();
+	}
+	case 2: {
+		return cliente();
+	}
+	default:
+		cout << "no se ingreso una opcion correcta";
+		return altaconsumo();
+		break;
+	}
+}
+void listaconsumo() {
+	int i = 0;
+	string linea;
+	fstream reg;
+	reg.open("consumo.txt", ios::in | ios::app);
+	if (!reg.is_open()) {
+		cout << "No se pudo abrir el archivo" << endl;
+	}
+	while (getline(reg, linea, '\n')) {
+		cout << "El consumo del cliente que fue ingresada en la posicion  " << "[" << i << "]" << endl;
+		cout << linea << endl;
+		i++;
+	}
+	reg.close();
+}
+void printBuildDateTime() {
+	cout << __TIMESTAMP__ << endl;
+}
+void restablecercontra() {
+	fstream fin;
+	ofstream temp;
+	string u, p, linea, contra, ref;
+	int op = 0, lineacambiar, n, pase = 0;
+	cout << "ingrese una opcion\n 1.Restablecer admin\n 2.Restablecer cajero" << endl;
+	cin >> op;
+	switch (op)
+	{
+	case 1: {
+		fin.open("admin.txt", ios::in);
+		temp.open("temp.txt");
+		cout << "Ingrese el numero del admin al que quiera cambiar la contrasenia" << endl;
+		cin >> lineacambiar;
+
+		while (getline(fin, ref, '\n')) {
+
+			if (i == lineacambiar)
+				break;
+			i++;
+		}
+		fin.close();
+
+		fin.open("admin.txt", ios::in);
+		while (getline(fin, linea)) {
+			if (linea != ref)
+				temp << linea << endl;
+		}
+		fstream refe;
+		refe.open("temp2", ios::out);
+		refe << ref;
+		refe.close();
+		cout << "Ingrese la nueva contrasenia" << endl;
+		cin >> contra;
+		Contrainvalida(contra);
+		refe.open("temp2", ios::in);
+		refe >> u >> p >> n;
+		p = contra;
+		temp << u << ' ' << p << ' ' << n << endl;
+		fin.close();
+		temp.close();
+		refe.close();
+		remove("temp2.txt");
+		remove("admin.txt");
+		rename("temp.txt", "admin.txt");
+		admin();
+	}
+	case 2: {
+		fin.open("cajero.txt", ios::in);
+		temp.open("temp.txt");
+		cout << "Ingrese el numero del admin al que quiera cambiar la contrasenia" << endl;
+		cin >> lineacambiar;
+
+		while (getline(fin, ref, '\n')) {
+
+			if (i == lineacambiar)
+				break;
+			i++;
+		}
+		fin.close();
+
+		fin.open("cajero.txt", ios::in);
+		while (getline(fin, linea)) {
+			if (linea != ref)
+				temp << linea << endl;
+		}
+		fstream refe;
+		refe.open("temp2", ios::out);
+		refe << ref;
+		refe.close();
+		cout << "Ingrese la nueva contrasenia" << endl;
+		cin >> contra;
+		Contrainvalida(contra);
+		refe.open("temp2", ios::in);
+		refe >> u >> p >> n;
+		p = contra;
+		temp << u << ' ' << p << ' ' << n << endl;
+		fin.close();
+		temp.close();
+		refe.close();
+		remove("temp2.txt");
+		remove("cajero.txt");
+		rename("temp.txt", "cajero.txt");
+		admin();
+	}
+	default:
+		cout << "no se ingreso una opcion correcta" << endl;
+		restablecercontra();
+	}
+}
+void registroadminbinario(string regadmin, string regpass) {
+	fstream reg;
+	reg.open("adminenbinario.bin", ios::out | ios::binary | ios::app);
+	if (!reg.is_open())
+	{
+		cout << "no se pudo abrir el archivo" << endl;
+		return;
+	}
+	reg.write((char*)&regadmin, sizeof(regadmin));
+	reg.write((char*)&regpass, sizeof(regpass));
+	reg.close();
+}
+void leeradminbinario(string regadmin, string regpass) {
+	fstream reg;
+	int size = 0;
+	reg.open("adminenbinario.bin", ios::in | ios::binary | ios::app);
+	reg.seekg(0, ios::end);
+	size = (int)reg.tellg();
+	reg.seekg(0, ios::beg);
+
+	while (reg.tellg() < size) {
+		reg.read((char*)&regadmin, sizeof(regadmin));
+		reg.read((char*)&regpass, sizeof(regpass));
+	}
+
+	cout << regadmin << "\t" << regpass << endl;
+	reg.close();
+}
+void registrocajerobinario(string regcajero, string regcontra, string foto) {
+	fstream reg;
+	reg.open("cajeroenbinario.bin", ios::out | ios::binary | ios::app);
+	if (!reg.is_open())
+	{
+		cout << "no se pudo abrir el archivo" << endl;
+		return;
+	}
+	reg.write((char*)&regcajero, sizeof(regcajero));
+	reg.write((char*)&regcontra, sizeof(regcontra));
+	reg.close();
+}
+void leercajerobinario(string regcajero, string regcontra, string foto) {
+	fstream reg;
+	int size = 0;
+	reg.open("cajeroenbinario.bin", ios::in | ios::binary | ios::app);
+	reg.seekg(0, ios::end);
+	size = (int)reg.tellg();
+	reg.seekg(0, ios::beg);
+
+	while (reg.tellg() < size) {
+		reg.read((char*)&regcajero, sizeof(regcajero));
+		reg.read((char*)&regcontra, sizeof(regcontra));
+	}
+
+	cout << regcajero << "\t" << regcontra << endl;
+	reg.close();
+}
+void registroclientesbinario(string nomcliente, string email, int telefono) {
+	fstream reg;
+	reg.open("clienteenbinario.bin", ios::out | ios::binary | ios::app);
+	if (!reg.is_open())
+	{
+		cout << "no se pudo abrir el archivo" << endl;
+		return;
+	}
+	reg.write((char*)&nomcliente, sizeof(nomcliente));
+	reg.write((char*)&email, sizeof(email));
+	reg.write((char*)&telefono, sizeof(telefono));
+
+	reg.close();
+}
+void leerclientesbinario(string nomcliente, string email, int telefono) {
+	fstream reg;
+	int size = 0;
+	reg.open("clienteenbinario.bin", ios::in | ios::binary | ios::app);
+	reg.seekg(0, ios::end);
+	size = (int)reg.tellg();
+	reg.seekg(0, ios::beg);
+
+	while (reg.tellg() < size) {
+		reg.read((char*)&nomcliente, sizeof(nomcliente));
+		reg.read((char*)&email, sizeof(email));
+		reg.read((char*)&telefono, sizeof(telefono));
+	}
+
+	cout << nomcliente << "\t" << email << "\t" << telefono << endl;
+	reg.close();
+}
+void registropromosbinario(string nombrepromo, int montopromo, float porcentajepromo, int estatus) {
+	fstream reg;
+	reg.open("clienteenbinario.bin", ios::out | ios::binary | ios::app);
+	if (!reg.is_open())
+	{
+		cout << "no se pudo abrir el archivo" << endl;
+		return;
+	}
+	reg.write((char*)&nombrepromo, sizeof(nombrepromo));
+	reg.write((char*)&montopromo, sizeof(montopromo));
+	reg.write((char*)&porcentajepromo, sizeof(porcentajepromo));
+	reg.write((char*)&estatus, sizeof(estatus));
+
+	reg.close();
+}
+void leerpromosbinario(string nombrepromo, int montopromo, float porcentajepromo, int estatus) {
+	fstream reg;
+	int size = 0;
+	reg.open("clienteenbinario.bin", ios::in | ios::binary | ios::app);
+	reg.seekg(0, ios::end);
+	size = (int)reg.tellg();
+	reg.seekg(0, ios::beg);
+
+	while (reg.tellg() < size) {
+		reg.read((char*)&nombrepromo, sizeof(nombrepromo));
+		reg.read((char*)&montopromo, sizeof(montopromo));
+		reg.read((char*)&porcentajepromo, sizeof(porcentajepromo));
+	}
+
+	cout << nombrepromo << "\t" << montopromo << "\t" << porcentajepromo << "\t" << estatus << endl;
+	reg.close();
+}
+void registroconsumosbinario(string nomcliente, int monto, int monto2, float subtotal, float descuento, float total, int numcliente) {
+	fstream reg;
+	reg.open("clienteenbinario.bin", ios::out | ios::binary | ios::app);
+	if (!reg.is_open())
+	{
+		cout << "no se pudo abrir el archivo" << endl;
+		return;
+	}
+	reg.write((char*)&nomcliente, sizeof(nomcliente));
+	reg.write((char*)&monto, sizeof(monto));
+	reg.write((char*)&monto2, sizeof(monto2));
+	reg.write((char*)&subtotal, sizeof(subtotal));
+	reg.write((char*)&descuento, sizeof(descuento));
+	reg.write((char*)&total, sizeof(total));
+	reg.write((char*)&numcliente, sizeof(numcliente));
+
+	reg.close();
+}
+void leerconsumosbinario(string nomcliente, int monto, int monto2, float subtotal, float descuento, float total, int numcliente) {
+	fstream reg;
+	int size = 0;
+	reg.open("clienteenbinario.bin", ios::in | ios::binary | ios::app);
+	reg.seekg(0, ios::end);
+	size = (int)reg.tellg();
+	reg.seekg(0, ios::beg);
+
+	while (reg.tellg() < size) {
+		reg.read((char*)&nomcliente, sizeof(nomcliente));
+		reg.read((char*)&monto, sizeof(monto));
+		reg.read((char*)&monto2, sizeof(monto2));
+		reg.read((char*)&subtotal, sizeof(subtotal));
+		reg.read((char*)&descuento, sizeof(descuento));
+		reg.read((char*)&total, sizeof(total));
+		reg.read((char*)&numcliente, sizeof(numcliente));
+	}
+
+	cout << nomcliente << "\t" << monto << "\t" << monto2 << "\t" << subtotal << "\t" << descuento << "\t" << total << "\t" << numcliente << endl;
+	reg.close();
+}
